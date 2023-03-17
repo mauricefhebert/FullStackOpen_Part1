@@ -9,7 +9,6 @@ const App = () => {
   const sum = good + neutral + bad;
 
   const getAverage = () => {
-    const sum = good + neutral + bad;
     return sum > 0 ? sum / 3 : 0;
   };
 
@@ -21,20 +20,6 @@ const App = () => {
     } else return 0;
   };
 
-  if (sum === 0) {
-    return (
-      <div>
-        <h2>Give feedback</h2>
-        <Button handleClick={() => setGood(good + 1)} text="Good" />
-        <Button handleClick={() => setNeutral(neutral + 1)} text="Neutral" />
-        <Button handleClick={() => setBad(bad + 1)} text="Bad" />
-
-        <h2>Statistics</h2>
-        <p>No feedback received</p>
-      </div>
-    );
-  }
-
   return (
     <div>
       <h2>Give feedback</h2>
@@ -42,32 +27,59 @@ const App = () => {
       <Button handleClick={() => setNeutral(neutral + 1)} text="Neutral" />
       <Button handleClick={() => setBad(bad + 1)} text="Bad" />
 
-      <h2>Statistics</h2>
-      <StatisticLine value={good} text="Good" />
-      <StatisticLine value={neutral} text="Neutral" />
-      <StatisticLine value={bad} text="Bad" />
-      <StatisticLine value={good + neutral + bad} text="All" />
-      <StatisticLine value={getAverage()} text="Average" />
-      <StatisticLine
-        value={getPercentageOfPositiveFeedback() + "%"}
-        text="Positive feedback"
+      <Statistics
+        sum={sum}
+        good={good}
+        neutral={neutral}
+        bad={bad}
+        average={getAverage()}
+        percentage={getPercentageOfPositiveFeedback()}
       />
     </div>
   );
 };
 
-const ButtonContainer = () => {};
-
 const Button = ({ handleClick, text }) => (
   <button onClick={handleClick}>{text}</button>
 );
 
-const StatisticsContainer = () => {};
+const Statistics = ({ sum, good, neutral, bad, average, percentage }) => {
+  if (sum === 0)
+    return (
+      <div>
+        <h2>Statistics</h2>
+        <p>No feedback received</p>
+      </div>
+    );
+
+  return (
+    <div>
+      <h2>Statistics</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>feedback</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <StatisticLine value={good} text="Good" />
+          <StatisticLine value={neutral} text="Neutral" />
+          <StatisticLine value={bad} text="Bad" />
+          <StatisticLine value={sum} text="All" />
+          <StatisticLine value={average} text="Average" />
+          <StatisticLine value={percentage + "%"} text="Positive feedback" />
+        </tbody>
+      </table>
+    </div>
+  );
+};
 
 const StatisticLine = ({ value, text }) => (
-  <p>
-    {text}: {value}
-  </p>
+  <tr>
+    <td>{text}</td>
+    <td>{value}</td>
+  </tr>
 );
 
 export default App;
